@@ -9,7 +9,29 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
 
-####********************* КЛИЕНТСКАЯ ЧАСТЬ *********************####
+async def on_startup(_):
+    print('Бот вышел в онлайн')
+
+'''*********************КЛИЕНТСКАЯ ЧАСТЬ*********************'''
+@dp.message_handler(commands=['start', 'help'])
+async def command_start(message: types.Message):
+    try:
+        await bot.send_message(message.from_user.id, 'Приятного аппетита')
+        await message.delete()
+    except:
+        await message.reply('Общение с ботом через ЛС, напишите ему: \nhttps://t.me/Pizzanita_bot')
+
+
+@dp.message_handler(commands=['Режим_работы'])
+async def bot_schedule(message: types.Message):
+    await bot.send_message(message.from_user.id, 'вт-пт с 09.00 до 22.00')
+    await message.answer("вт-пт с 09.00 до 22.00")
+
+
+@dp.message_handler(commands=['Адрес'])
+async def bot_schedule(message: types.Message):
+    await bot.send_message(message.from_user.id, 'ул. Колбасная 59, кв 11')
+    await message.answer("ул. Колбасная 59, кв 11")
 
 
 @dp.message_handler()
@@ -24,4 +46,4 @@ async def echo_send(message: types.Message):
     # await bot.send_message(message.from_user.id, message.text)
 
 
-executor.start_polling(dp, skip_updates=True)
+executor.start_polling(dp, skip_updates=True, on_startup=on_startup )
